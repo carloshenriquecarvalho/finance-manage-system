@@ -1,0 +1,1 @@
+CREATE INDEX idx_company ON TRANSACTIONS(company_id);

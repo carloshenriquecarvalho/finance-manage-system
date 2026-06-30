@@ -1,0 +1,97 @@
+CREATE TABLE USERS(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(110) NOT NULL UNIQUE,
+    name VARCHAR(45) NOT NULL,
+    passwordHash VARCHAR(250) NOT NULL,
+    isActive BOOLEAN DEFAULT(TRUE),
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NULL
+);
+
+CREATE TABLE COMPANIES(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(85) NOT NULL,
+    cnpj VARCHAR(18) UNIQUE NOT NULL,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NULL
+);
+
+CREATE TABLE USERS_COMPANIES(
+    user_id UUID NOT NULL,
+    company_id UUID NOT NULL,
+    joined_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NULL,
+    current_user_role user_role NOT NULL DEFAULT('VIEWER'),
+    FOREIGN KEY (user_id)
+        REFERENCES USERS(id) ON DELETE CASCADE,
+    FOREIGN KEY (company_id)
+        REFERENCES COMPANIES(id) ON DELETE CASCADE,
+    PRIMARY KEY(user_id, company_id)
+);
+
+CREATE TABLE COST_CENTERS(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(80) NOT NULL,
+    company_id UUID NOT NULL,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NULL,
+
+    FOREIGN KEY (company_id)
+     REFERENCES COMPANIES(id) ON DELETE CASCADE,
+
+    UNIQUE(name, company_id)
+);
+
+
+CREATE TABLE CATEGORIES(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(45) NOT NULL,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NULL,
+
+    cost_center_id UUID NOT NULL,
+
+    FOREIGN KEY(cost_center_id)
+       REFERENCES COST_CENTERS(id) ON DELETE CASCADE,
+
+    UNIQUE(name, cost_center_id)
+);
+
+CREATE TABLE TRANSACTIONS(
+     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+     title VARCHAR(150) NOT NULL DEFAULT('TRANSACTION'),
+     reminder_at TIMESTAMPTZ DEFAULT NULL,
+     updated_at TIMESTAMPTZ DEFAULT NULL,
+     value DECIMAL(15,2) NOT NULL,
+     description TEXT,
+     status transaction_status NOT NULL DEFAULT('PENDING'),
+     paid_at TIMESTAMPTZ DEFAULT NULL,
+     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+     due_date TIMESTAMPTZ NOT NULL,
+     current_type transaction_type NOT NULL,
+
+     company_id UUID NOT NULL,
+     category_id UUID NOT NULL,
+
+     FOREIGN KEY (company_id)
+         REFERENCES COMPANIES(id) ON DELETE CASCADE,
+     FOREIGN KEY (category_id)
+         REFERENCES CATEGORIES(id) ON DELETE CASCADE
+);
+
+CREATE TABLE ATTACHMENTS(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    file_title VARCHAR(45) NOT NULL,
+    file_path TEXT NOT NULL,
+    upload_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    file_size BIGINT,
+
+    transaction_id UUID NOT NULL,
+
+    FOREIGN KEY (transaction_id)
+        REFERENCES TRANSACTIONS(id)
+);

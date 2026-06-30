@@ -1,0 +1,3 @@
+CREATE TYPE user_role AS ENUM('ADM', 'EMPLOYEE', 'VIEWER', 'SYSTEM_ADM');
+CREATE TYPE transaction_status AS ENUM('PAID', 'EXPIRED', 'CANCELED', 'PENDING');
+CREATE TYPE transaction_type AS ENUM('INCOME', 'EXPENSE');
