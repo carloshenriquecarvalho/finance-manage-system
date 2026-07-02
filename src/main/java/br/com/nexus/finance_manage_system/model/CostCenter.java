@@ -6,16 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
-@Table(name = "COMPANIES")
-public class Company {
+@Table(name = "COST_CENTERS")
+public class CostCenter {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -23,21 +22,16 @@ public class Company {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "cnpj")
-    private String cnpj;
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     @Column(name = "created_at")
-    private OffsetDateTime createdAt;
+    private OffsetDateTime joinedAt;
 
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
 
-    @OneToMany(mappedBy = "company")
-    private Set<UserCompany> userCompanies = new HashSet<>();
-
-    @OneToMany(mappedBy = "company")
-    private Set<CostCenter> costCenters;
-
-    @OneToMany(mappedBy = "company")
-    private Set<Transaction> transactions;
+    @OneToMany(mappedBy = "costCenter")
+    private Set<Category> categories;
 }

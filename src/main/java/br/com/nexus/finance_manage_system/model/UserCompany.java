@@ -15,13 +15,11 @@ import java.util.UUID;
 @Table(name = "USERS_COMPANIES")
 public class UserCompany {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
