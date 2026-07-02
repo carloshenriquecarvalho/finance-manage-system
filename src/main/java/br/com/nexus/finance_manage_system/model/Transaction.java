@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -55,7 +56,7 @@ public class Transaction {
     private Company company;
 
     @OneToMany(mappedBy = "transaction")
-    private Set<Attachment> attachments;
+    private Set<Attachment> attachments = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "category_id")

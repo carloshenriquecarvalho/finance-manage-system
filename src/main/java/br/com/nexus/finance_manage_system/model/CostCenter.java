@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -33,5 +34,5 @@ public class CostCenter {
     private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "costCenter")
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 }

@@ -1,5 +1,6 @@
-package br.com.nexus.finance_manage_system.model;
+package br.com.nexus.finance_manage_system.user;
 
+import br.com.nexus.finance_manage_system.model.UserCompany;
 import jakarta.persistence.*;
 import lombok.*;
 import org.jspecify.annotations.Nullable;
@@ -28,6 +29,9 @@ public class User implements UserDetails {
     @Column(name = "password_hash")
     private String passwordHash;
 
+    @Column(name = "is_active")
+    private Boolean isActive;
+
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
@@ -44,12 +48,12 @@ public class User implements UserDetails {
 
     @Override
     public @Nullable String getPassword() {
-        return "";
+        return passwordHash;
     }
 
     @Override
     public String getUsername() {
-        return this.email;
+        return email;
     }
 
     @Override
@@ -69,6 +73,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isActive;
     }
 }

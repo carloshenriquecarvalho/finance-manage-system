@@ -36,8 +36,8 @@ public class Company {
     private Set<UserCompany> userCompanies = new HashSet<>();
 
     @OneToMany(mappedBy = "company")
-    private Set<CostCenter> costCenters;
+    private Set<CostCenter> costCenters = new HashSet<>();
 
     @OneToMany(mappedBy = "company")
-    private Set<Transaction> transactions;
+    private Set<Transaction> transactions = new HashSet<>();
 }
