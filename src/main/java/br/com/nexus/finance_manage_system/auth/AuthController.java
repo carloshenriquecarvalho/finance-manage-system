@@ -30,7 +30,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.email(),
@@ -39,8 +40,10 @@ public class AuthController {
         );
 
         User user = (User) authentication.getPrincipal();
-
-        return new LoginResponse(tokenService.generateToken(user));
+        if(user == null) {
+            throw new IllegalCallerException("User does not exist");
+        }
+        return ResponseEntity.ok(new LoginResponse(tokenService.generateToken(user)));
     }
 
     @PostMapping("/register")

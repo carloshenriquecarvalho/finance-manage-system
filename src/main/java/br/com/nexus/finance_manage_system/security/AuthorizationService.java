@@ -1,11 +1,12 @@
 package br.com.nexus.finance_manage_system.security;
 
+import br.com.nexus.finance_manage_system.exception.EmailAlreadyExistsException;
+import br.com.nexus.finance_manage_system.exception.InvalidCredentialsException;
 import br.com.nexus.finance_manage_system.security.dto.RegisterRequest;
 import br.com.nexus.finance_manage_system.security.dto.RegisterResponse;
 import br.com.nexus.finance_manage_system.user.User;
 import br.com.nexus.finance_manage_system.user.UserRepository;
 import org.jspecify.annotations.NonNull;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,13 +27,13 @@ public class AuthorizationService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+    public UserDetails loadUserByUsername(@NonNull String username)  throws UsernameNotFoundException{
+        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     public RegisterResponse createNewUser(RegisterRequest registerRequest){
         if(registerRequest.name().isEmpty() || registerRequest.email().isEmpty() || registerRequest.password().isEmpty()) {
-            throw new IllegalArgumentException("Invalid credentials");
+            throw new InvalidCredentialsException();
         }
 
         if(userRepository.findByEmail(registerRequest.email()).isEmpty()) {
@@ -45,12 +46,11 @@ public class AuthorizationService implements UserDetailsService {
             user.setCreatedAt(OffsetDateTime.now());
             user.setIsActive(true);
             User registeredUser =  userRepository.save(user);
-            RegisterResponse responseUser = new RegisterResponse(String.valueOf(registeredUser.getId()), registeredUser.getName());
 
-            return responseUser;
+            return new RegisterResponse(String.valueOf(registeredUser.getId()), registeredUser.getName());
         } else {
 
-            throw new IllegalArgumentException("User already exists");
+            throw new EmailAlreadyExistsException();
         }
     }
 }
