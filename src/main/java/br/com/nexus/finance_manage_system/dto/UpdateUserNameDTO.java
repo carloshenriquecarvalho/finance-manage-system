@@ -1,0 +1,4 @@
+package br.com.nexus.finance_manage_system.dto;
+
+public record UpdateUserNameDTO(String name) {
+}
