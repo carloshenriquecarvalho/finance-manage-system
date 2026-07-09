@@ -1,5 +1,6 @@
 package br.com.nexus.finance_manage_system.model;
 
+import br.com.nexus.finance_manage_system.company.Company;
 import br.com.nexus.finance_manage_system.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

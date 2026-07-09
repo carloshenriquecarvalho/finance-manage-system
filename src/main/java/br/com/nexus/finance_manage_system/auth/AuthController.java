@@ -1,6 +1,5 @@
 package br.com.nexus.finance_manage_system.auth;
 
-import br.com.nexus.finance_manage_system.dto.UserResponseDTO;
 import br.com.nexus.finance_manage_system.security.AuthorizationService;
 import br.com.nexus.finance_manage_system.security.TokenService;
 import br.com.nexus.finance_manage_system.security.dto.RegisterRequest;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,9 +36,6 @@ public class AuthController {
         );
 
         User user = (User) authentication.getPrincipal();
-        if(user == null) {
-            throw new IllegalCallerException("User does not exist");
-        }
         return ResponseEntity.ok(new LoginResponse(tokenService.generateToken(user)));
     }
 

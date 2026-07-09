@@ -29,21 +29,18 @@ public class UserService {
 
     public UserResponseDTO updateUserName(User user, String userName) {
         user.setName(userName);
-        user.setUpdatedAt(OffsetDateTime.now());
         User updatedUser = this.userRepository.save(user);
         return new UserResponseDTO(updatedUser);
     }
 
     public UserResponseDTO updateUserEmail(User user, String email){
         user.setEmail(email);
-        user.setUpdatedAt(OffsetDateTime.now());
         User updatedUser = this.userRepository.save(user);
         return new UserResponseDTO(updatedUser);
     }
 
     public UserResponseDTO updateUserStatus(User user, Boolean userStatus) {
         user.setIsActive(userStatus);
-        user.setUpdatedAt(OffsetDateTime.now());
 
         User updatedUser = this.userRepository.save(user);
         return new UserResponseDTO(updatedUser);
@@ -55,7 +52,7 @@ public class UserService {
             throw new InvalidCredentialsException();
         }
         user.setPasswordHash(passwordEncoder.encode(newPassword));
-        user.setUpdatedAt(OffsetDateTime.now());
+
         User updatedUser = this.userRepository.save(user);
         return new  UserResponseDTO(updatedUser);
     }

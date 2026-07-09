@@ -34,16 +34,11 @@ public class TokenService {
     }
 
     public UUID validateToken(String token) {
-        try {
-            Jws<Claims> jws =  Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey())
-                    .build()
-                    .parseClaimsJws(token);
+        Jws<Claims> jws = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token);
 
-            Claims claims = jws.getBody();
-            return UUID.fromString(claims.getSubject());
-        } catch (JwtException e) {
-            return null;
-        }
+        return UUID.fromString(jws.getBody().getSubject());
     }
 }
